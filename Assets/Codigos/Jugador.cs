@@ -5,7 +5,6 @@ using Fusion;
 
 public class Jugador : NetworkBehaviour
 {
-
     private CharacterController _controlador;
     private Vector3 _velocidad;
     private bool _saltarPresionado;
@@ -34,15 +33,28 @@ public class Jugador : NetworkBehaviour
             return;
         }
 
-        _velocidad.y += ValorGravedad * Runner.DeltaTime;
+        
+        _velocidad.y += ValorGravedad * Time.fixedDeltaTime;
+
+        
         if (_saltarPresionado)
         {
-            _velocidad.y += FuerzaSalto;
+            _velocidad.y = FuerzaSalto;
             _saltarPresionado = false;
         }
 
-        Vector3 mover = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * VelocidadJugador;
-        _controlador.Move(mover + _velocidad * Runner.DeltaTime);
-    }
+        
+        Vector3 direccionMovimiento = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
+        direccionMovimiento = Vector3.ClampMagnitude(direccionMovimiento, 1f); 
 
+     
+        _controlador.Move(direccionMovimiento * VelocidadJugador * Time.fixedDeltaTime);
+
+        
+        _controlador.Move(_velocidad * Time.fixedDeltaTime);
+    }
 }
+
+
+
+
