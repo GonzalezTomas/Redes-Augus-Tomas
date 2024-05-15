@@ -5,55 +5,51 @@ using Fusion;
 
 public class Jugador : NetworkBehaviour
 {
-    private CharacterController _controlador;
-    private Vector3 _velocidad;
-    private bool _saltarPresionado;
+    public float speed;
+    public float jumpForce;
+    public Animator anim;
 
-    public float VelocidadJugador = 2f;
-    public float FuerzaSalto = 5f;
-    public float ValorGravedad = -9.81f;
+    private Rigidbody rb;
+    private float horizontalInput;
+    private float verticalInput;
 
-    private void Awake()
+
+    private void Start()
     {
-        _controlador = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Saltar") && _controlador.isGrounded)
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
-            _saltarPresionado = true;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            // Aquí puedes agregar cualquier animación de salto que necesites
         }
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (!HasStateAuthority)
-        {
-            return;
-        }
+        base.FixedUpdateNetwork();
 
-        
-        _velocidad.y += ValorGravedad * Time.fixedDeltaTime;
+        transform.Translate(Vector3.forward * verticalInput * Runner.DeltaTime * speed);
+        transform.Translate(Vector3.right * horizontalInput * Runner.DeltaTime * speed);
+      
+    }
 
-        
-        if (_saltarPresionado)
-        {
-            _velocidad.y = FuerzaSalto;
-            _saltarPresionado = false;
-        }
-
-        
-        Vector3 direccionMovimiento = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
-        direccionMovimiento = Vector3.ClampMagnitude(direccionMovimiento, 1f); 
-
-     
-        _controlador.Move(direccionMovimiento * VelocidadJugador * Time.fixedDeltaTime);
-
-        
-        _controlador.Move(_velocidad * Time.fixedDeltaTime);
+    private bool IsGrounded()
+    {
+        RaycastHit hit;
+        float distance = GetComponent<Collider>().bounds.extents.y + 0.1f;
+        return Physics.Raycast(transform.position, Vector3.down, out hit, distance);
     }
 }
+
+  
+
 
 
 
