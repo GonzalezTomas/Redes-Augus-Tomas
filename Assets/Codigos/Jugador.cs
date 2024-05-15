@@ -14,9 +14,11 @@ public class Jugador : NetworkBehaviour
     private float verticalInput;
 
 
-    private void Start()
+    public override void Spawned()
     {
         rb = GetComponent<Rigidbody>();
+
+        if (!HasStateAuthority) return;
     }
 
     void Update()
@@ -36,8 +38,7 @@ public class Jugador : NetworkBehaviour
         base.FixedUpdateNetwork();
 
         transform.Translate(Vector3.forward * verticalInput * Runner.DeltaTime * speed);
-        transform.Translate(Vector3.right * horizontalInput * Runner.DeltaTime * speed);
-      
+        transform.Translate(Vector3.right * horizontalInput * Runner.DeltaTime * speed);    
     }
 
     private bool IsGrounded()
@@ -46,6 +47,11 @@ public class Jugador : NetworkBehaviour
         float distance = GetComponent<Collider>().bounds.extents.y + 0.1f;
         return Physics.Raycast(transform.position, Vector3.down, out hit, distance);
     }
+
+   /* public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        base.Despawned(runner, hasState);
+    } */
 }
 
   
