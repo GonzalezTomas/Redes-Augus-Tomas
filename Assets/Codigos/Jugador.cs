@@ -13,12 +13,15 @@ public class Jugador : NetworkBehaviour
     private float horizontalInput;
     private float verticalInput;
 
+  
+
 
     public override void Spawned()
     {
         rb = GetComponent<Rigidbody>();
 
-        if (!HasStateAuthority) return;
+        if (!HasStateAuthority) return;     
+
     }
 
     void Update()

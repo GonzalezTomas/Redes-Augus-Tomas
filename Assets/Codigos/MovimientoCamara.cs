@@ -12,11 +12,7 @@ public class MovimientoCamera : MonoBehaviour
 
     private float _rotX = 0;
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
+   
     void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * velocidadRotacion;
