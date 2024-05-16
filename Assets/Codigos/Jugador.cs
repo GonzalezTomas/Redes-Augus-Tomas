@@ -11,20 +11,20 @@ public class Jugador : NetworkBehaviour
 
     private Rigidbody rb;
     private float horizontalInput;
-    private float verticalInput;
 
     public override void Spawned()
     {
         rb = GetComponent<Rigidbody>();
 
-        if (!HasStateAuthority) return;     
+        if (!HasStateAuthority) return;
 
+        Camera.main.GetComponent<Camara>()?.Target(transform);
     }
 
     void Update()
     {
+        // Obtener la entrada del teclado para moverse horizontalmente
         horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
 
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
@@ -37,8 +37,9 @@ public class Jugador : NetworkBehaviour
     {
         base.FixedUpdateNetwork();
 
-        transform.Translate(Vector3.forward * verticalInput * Runner.DeltaTime * speed);
-        transform.Translate(Vector3.right * horizontalInput * Runner.DeltaTime * speed);    
+        // Mover el jugador horizontalmente
+        Vector3 movement = Vector3.right * horizontalInput * Runner.DeltaTime * speed;
+        rb.MovePosition(rb.position + movement);
     }
 
     private bool IsGrounded()
@@ -47,14 +48,8 @@ public class Jugador : NetworkBehaviour
         float distance = GetComponent<Collider>().bounds.extents.y + 0.1f;
         return Physics.Raycast(transform.position, Vector3.down, out hit, distance);
     }
-
-   /* public override void Despawned(NetworkRunner runner, bool hasState)
-    {
-        base.Despawned(runner, hasState);
-    } */
 }
 
-  
 
 
 

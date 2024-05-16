@@ -9,10 +9,8 @@ public class MovimientoCamera : MonoBehaviour
     public float distanciaArma = 2.0f;
     public float alturaArma = -0.5f;
     public float velocidadRotacion = 3.0f;
- 
 
     private float _rotX = 0;
-
 
     void LateUpdate()
     {
