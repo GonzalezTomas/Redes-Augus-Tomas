@@ -51,8 +51,11 @@ public class Jugador : NetworkBehaviour
     {
         base.FixedUpdateNetwork();
 
-        transform.forward = Vector3.right * Mathf.Sign((horizontalInput));
-       
+        if (horizontalInput != 0)
+        {
+            transform.forward = horizontalInput > 0 ? Vector3.right : Vector3.left;
+        }
+
         Vector3 movement = Vector3.right * horizontalInput * Runner.DeltaTime * speed;
        
         rb.MovePosition(rb.position + movement);  
@@ -85,7 +88,7 @@ public class Jugador : NetworkBehaviour
 
     }
 
-    [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
+    //[Rpc(RpcSources.All,RpcTargets.StateAuthority)]
     public void RecibirDaño(float dmg)
     {
         NetworkedHealth -= dmg;
