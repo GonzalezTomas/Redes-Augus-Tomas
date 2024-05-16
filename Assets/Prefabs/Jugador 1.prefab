@@ -437,11 +437,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7
-  jumpForce: 7
+  jumpForce: 5
   danio: 20
   anim: {fileID: 7291073549532752815}
   _bala: {fileID: 5808619706472329623, guid: 0839274b41201c446b2b92d2c796533f, type: 3}
   _apareceBala: {fileID: 7139622097324636317}
+  duracionDash: 0.1
+  velocidadDash: 30
   _Vida: 100
 --- !u!114 &3327462544245426806
 MonoBehaviour:
