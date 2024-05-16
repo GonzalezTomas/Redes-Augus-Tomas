@@ -17,9 +17,7 @@ public class Camara : MonoBehaviour
         if (!_jugador) return;
 
         Vector3 posicion = transform.position;
-        posicion.x = _jugador.position.x;
-       
-
+        posicion.x = _jugador.position.x;   
         transform.position = posicion;
 
         

@@ -436,9 +436,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb83dc756eef4f469f7030fad772bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  jumpForce: 10
+  speed: 7
+  jumpForce: 7
+  danio: 20
   anim: {fileID: 7291073549532752815}
+  LayerDisapro:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &3327462544245426806
 MonoBehaviour:
   m_ObjectHideFlags: 0
