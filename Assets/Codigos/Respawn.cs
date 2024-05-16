@@ -11,8 +11,8 @@ public class Respawn : SimulationBehaviour, IPlayerJoined
     {
         if (Jugador == Runner.LocalPlayer)
         {
-           Runner.Spawn(_jugardorPrefab, Vector3.zero);
-
+            Vector3 posicion = new Vector3 (-4.25f, 2.5f, 0f);
+            Runner.Spawn(_jugardorPrefab, posicion);
         }
     }
 }
