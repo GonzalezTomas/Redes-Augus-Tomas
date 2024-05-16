@@ -9,16 +9,18 @@ public class Jugador : NetworkBehaviour
     public float jumpForce;
     public float danio = 20f;
     public Animator anim;
-    public LayerMask LayerDisapro;
+   // public LayerMask LayerDisapro;
+    public Bala _bala;
+    public Transform _apareceBala;
 
     private Rigidbody rb;
     private float horizontalInput;
     private bool _disparo;
 
-  //  [Networked, OnChangedRender(nameof(OnNetHealtChanged))]
-    void OnNetHealtChanged() => Debug.Log($"Life = {NetworkedHealth}");
-    private float NetworkedHealth { get; set; } = 100;
-
+    [Networked, OnChangedRender(nameof(OnNetHealtChanged))]
+    public float Vida { get; set; } = 100;
+    void OnNetHealtChanged() => Debug.Log($"Vida = {Vida}");
+    
    
 
     public override void Spawned()
@@ -62,44 +64,48 @@ public class Jugador : NetworkBehaviour
 
         if(_disparo)
         {
-            Disparo();
+           // Disparo();
 
-           // Bala();
+            ApareceBala();
 
             _disparo =false;
         }
 
     }
 
-    void Disparo()
+  /*  void Disparo()
     {
         Debug.DrawRay(transform.position, transform.forward, Color.red, 2f);
 
         if(Runner.GetPhysicsScene().Raycast(transform.position, transform.forward, out var raycastHit, LayerDisapro)) 
         {
-            var jugador = raycastHit.transform.GetComponent<Jugador>();
+            var jug = raycastHit.transform.GetComponent<Jugador>();
 
-            jugador.RecibirDaño(danio);
+            jug.RPC_RecibirDaño(danio);
         }
+    } */
+
+    void ApareceBala()
+    {
+        Runner.Spawn(_bala, _apareceBala.position, _apareceBala.rotation);
     }
 
-    void Bala()
+    [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
+    public void RPC_RecibirDaño(float RecibirDanio)
     {
-
+        Local_RecibirDaño(RecibirDanio);
     }
 
-    //[Rpc(RpcSources.All,RpcTargets.StateAuthority)]
-    public void RecibirDaño(float dmg)
+    public void Local_RecibirDaño(float RecibirDanio)
     {
-        NetworkedHealth -= dmg;
+        Vida -= RecibirDanio;
 
-        if (NetworkedHealth <= 0)
+        if (Vida <= 0)
         {
             Muere();
         }
-
     }
-    
+
     void Muere()
     {
         Runner.Despawn(Object);
