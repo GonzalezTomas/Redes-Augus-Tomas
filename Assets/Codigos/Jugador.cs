@@ -63,27 +63,13 @@ public class Jugador : NetworkBehaviour
         rb.MovePosition(rb.position + movement);  
 
         if(_disparo)
-        {
-           // Disparo();
-
+        {        
             ApareceBala();
 
             _disparo =false;
         }
 
     }
-
-  /*  void Disparo()
-    {
-        Debug.DrawRay(transform.position, transform.forward, Color.red, 2f);
-
-        if(Runner.GetPhysicsScene().Raycast(transform.position, transform.forward, out var raycastHit, LayerDisapro)) 
-        {
-            var jug = raycastHit.transform.GetComponent<Jugador>();
-
-            jug.RPC_RecibirDaño(danio);
-        }
-    } */
 
     void ApareceBala()
     {
