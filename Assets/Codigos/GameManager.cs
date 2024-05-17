@@ -11,14 +11,12 @@ public class GameManager : NetworkBehaviour
     public UI_Manager uiManager;
     public bool gameIsPaused;
     public GameObject textPlayersNecesarios;
-    public Respawn respawn;
 
     private bool gameStarted = false;
 
     private void Awake()
     {
         uiManager = FindObjectOfType<UI_Manager>();
-        respawn = FindObjectOfType<Respawn>();
         FindAndAddPlayers();
     }
 
@@ -79,26 +77,20 @@ public class GameManager : NetworkBehaviour
 
         if (gameStarted && players.Count == 1)
         {
-            Jugador jugadorGanador = players[0];
-            Jugador jugadorPerdedor = players.Find(player => player != jugadorGanador);
+            // Solo queda un jugador en la lista, ha ganado
+            uiManager.MostrarPantallaGanaste(players[0]);
 
-            // Mostrar pantalla de ganaste al jugador ganador
-            uiManager.MostrarPantallaGanaste(jugadorGanador);
-
-            // Mostrar pantalla de perdiste al jugador perdedor
-            uiManager.MostrarPantallaPerdiste(jugadorPerdedor);
+            // Mostrar pantalla de "PERDISTE" a todos los jugadores que ya no están en la lista
+            GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("jugador");
+            foreach (GameObject playerObject in allPlayers)
+            {
+                Jugador playerComponent = playerObject.GetComponent<Jugador>();
+                if (playerComponent == null)
+                {
+                    uiManager.MostrarPantallaPerdiste();
+                }
+            }
         }
-        
-    }
-
-
-    public void ReiniciarJuego()
-    {
-        players.Clear();
-        gameStarted = false;
-        FindAndAddPlayers();
-        respawn.RespawnPlayers();
-        StartGame();
     }
 }
 
