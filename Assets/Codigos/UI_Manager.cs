@@ -31,6 +31,12 @@ public class UI_Manager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void OcultarPantallasResultado()
+    {
+        pantallaPerdiste.SetActive(false);
+        pantallaGanaste.SetActive(false);
+    }
 }
 
 

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Fusion;
+using System.Runtime.CompilerServices;
 
 public class GameManager : NetworkBehaviour
 {
@@ -39,7 +40,7 @@ public class GameManager : NetworkBehaviour
 
         if (gameStarted)
         {
-            CheckPlayerStates();
+            CondicionDeVictoriaODerrota();
         }
 
         uiManager.UpdatePlayerCount(players.Count);
@@ -71,26 +72,49 @@ public class GameManager : NetworkBehaviour
         Time.timeScale = 0;
     }
 
-    void CheckPlayerStates()
-    {
+    void CondicionDeVictoriaODerrota()
+    {     
         players.RemoveAll(player => player == null);
-
-        if (gameStarted && players.Count == 1)
+        
+        if (players.Count == 1)
         {
-            // Solo queda un jugador en la lista, ha ganado
-            uiManager.MostrarPantallaGanaste(players[0]);
+            Jugador jugadorRestante = players[0];
 
-            // Mostrar pantalla de "PERDISTE" a todos los jugadores que ya no están en la lista
-            GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("jugador");
-            foreach (GameObject playerObject in allPlayers)
+            if (jugadorRestante.Vida > 0)
+            {               
+                Jugador jugadorQueElimino = GetJugadorQueElimino(jugadorRestante);
+                if (jugadorQueElimino == null)
+                {                   
+                    uiManager.MostrarPantallaGanaste(jugadorRestante);
+                }          
+            }  
+            
+            PauseGame();
+        }
+    }
+   
+    Jugador GetJugadorQueElimino(Jugador jugador)
+    {
+      
+        foreach (Jugador otroJugador in players)
+        {           
+            if (otroJugador != jugador && otroJugador.Vida <= 0)
             {
-                Jugador playerComponent = playerObject.GetComponent<Jugador>();
-                if (playerComponent == null)
-                {
-                    uiManager.MostrarPantallaPerdiste();
-                }
+                return otroJugador;
             }
         }
+      
+        return null;
+    }
+
+    public void JugadorMuerto(Jugador jugador)
+    {
+        uiManager.MostrarPantallaPerdiste();
+    }
+    
+    public void JugadorEliminado(Jugador jugadorQueElimina, Jugador jugadorEliminado)
+    {
+        uiManager.MostrarPantallaGanaste(jugadorQueElimina);
     }
 }
 
