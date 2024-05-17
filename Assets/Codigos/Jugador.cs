@@ -32,25 +32,15 @@ public class Jugador : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnNetHealtChanged))]
     public float Vida { get; set; } = 100;
 
-
     void OnNetHealtChanged() => Debug.Log($"Vida = {Vida}");
-
-
 
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         playerID = nextPlayerID; // Asignar el ID único al jugador
         nextPlayerID++; // Incrementar el contador de ID para el próximo jugador
-        anim = GetComponent < Animator >();
+        anim = GetComponent<Animator>();
     }
-
-    public void Muere()
-    {
-        //gameManager.JugadorMuere(this);
-        Runner.Despawn(Object);
-    }
-
 
     public override void Spawned()
     {
@@ -61,11 +51,9 @@ public class Jugador : NetworkBehaviour
         Camera.main.GetComponent<Camara>()?.Target(transform);
     }
 
-
     void Update()
     {
         horizontalInput = Input.GetAxis("Horizontal");
-
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -82,12 +70,10 @@ public class Jugador : NetworkBehaviour
             }
         }
 
-
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             _disparo = true;
         }
-
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time >= UltimoDash + dashEnfriado && !dashActivado)
         {
@@ -95,7 +81,6 @@ public class Jugador : NetworkBehaviour
             UltimoDash = Time.time;
         }
     }
-
 
     public override void FixedUpdateNetwork()
     {
@@ -126,19 +111,16 @@ public class Jugador : NetworkBehaviour
         anim.SetBool("idle", !corriendo);
     }
 
-
     void ApareceBala()
     {
         Runner.Spawn(_bala, _apareceBala.position, _apareceBala.rotation);
     }
-
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_RecibirDaño(float RecibirDanio)
     {
         Local_RecibirDaño(RecibirDanio);
     }
-
 
     public void Local_RecibirDaño(float RecibirDanio)
     {
@@ -150,6 +132,18 @@ public class Jugador : NetworkBehaviour
         }
     }
 
+    public void Muere()
+    {
+        FindObjectOfType<GameManager>().JugadorMuerto(this);
+        Runner.Despawn(Object);
+    }
+
+    public void EliminarOtroJugador(Jugador jugadorEliminado)
+    {
+        jugadorEliminado.Local_RecibirDaño(danio);
+        FindObjectOfType<GameManager>().JugadorEliminado(this, jugadorEliminado);
+    }
+
     private bool IsGrounded()
     {
         RaycastHit hit;
@@ -157,17 +151,13 @@ public class Jugador : NetworkBehaviour
         return Physics.Raycast(transform.position, Vector3.down, out hit, distance);
     }
 
-
     IEnumerator Dash()
     {
         dashActivado = true;
 
-
         rb.velocity = transform.forward * velocidadDash;
 
-
         yield return new WaitForSeconds(duracionDash);
-
 
         rb.velocity = Vector3.zero;
 
