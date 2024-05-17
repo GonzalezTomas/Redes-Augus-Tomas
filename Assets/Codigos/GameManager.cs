@@ -73,26 +73,36 @@ public class GameManager : NetworkBehaviour
     }
 
     void CondicionDeVictoriaODerrota()
-    {     
+    {
         players.RemoveAll(player => player == null);
-        
+
         if (players.Count == 1)
         {
             Jugador jugadorRestante = players[0];
 
             if (jugadorRestante.Vida > 0)
-            {               
+            {
                 Jugador jugadorQueElimino = GetJugadorQueElimino(jugadorRestante);
                 if (jugadorQueElimino == null)
-                {                   
+                {
                     uiManager.MostrarPantallaGanaste(jugadorRestante);
-                }          
-            }  
-            
-            PauseGame();
+                    PauseGame(); // Pausar el juego cuando se muestra la pantalla de ganaste
+                }
+                else
+                {
+                    uiManager.MostrarPantallaPerdiste(); // Mostrar pantalla de perdiste si el jugador restante tiene vida pero alguien lo eliminó
+                    PauseGame(); // Pausar el juego cuando se muestra la pantalla de perdiste
+                }
+            }
+            else
+            {
+                uiManager.MostrarPantallaPerdiste(); // Mostrar pantalla de perdiste si el jugador restante tiene vida cero
+                PauseGame(); // Pausar el juego cuando se muestra la pantalla de perdiste
+            }
         }
     }
-   
+
+
     Jugador GetJugadorQueElimino(Jugador jugador)
     {
       
@@ -109,9 +119,10 @@ public class GameManager : NetworkBehaviour
 
     public void JugadorMuerto(Jugador jugador)
     {
+        if (!gameStarted) return; // Evita mostrar la pantalla si el juego no ha comenzado aún
         uiManager.MostrarPantallaPerdiste();
     }
-    
+
     public void JugadorEliminado(Jugador jugadorQueElimina, Jugador jugadorEliminado)
     {
         uiManager.MostrarPantallaGanaste(jugadorQueElimina);
