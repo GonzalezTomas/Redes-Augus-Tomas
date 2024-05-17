@@ -129,6 +129,7 @@ public class Jugador : NetworkBehaviour
         if (Vida <= 0)
         {
             Muere();
+            gameManager.JugadorMuerto(this); // Llama al GameManager cuando el jugador muere
         }
     }
 
@@ -141,7 +142,7 @@ public class Jugador : NetworkBehaviour
     public void EliminarOtroJugador(Jugador jugadorEliminado)
     {
         jugadorEliminado.Local_RecibirDaño(danio);
-        FindObjectOfType<GameManager>().JugadorEliminado(this, jugadorEliminado);
+        gameManager.JugadorEliminado(this, jugadorEliminado); // Llama al GameManager cuando elimina a otro jugador
     }
 
     private bool IsGrounded()
