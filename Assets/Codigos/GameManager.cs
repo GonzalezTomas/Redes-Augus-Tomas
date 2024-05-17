@@ -82,21 +82,14 @@ public class GameManager : NetworkBehaviour
 
             if (jugadorRestante.Vida > 0)
             {
-                Jugador jugadorQueElimino = GetJugadorQueElimino(jugadorRestante);
-                if (jugadorQueElimino == null)
-                {
-                    uiManager.MostrarPantallaGanaste(jugadorRestante);
-                    PauseGame(); // Pausar el juego cuando se muestra la pantalla de ganaste
-                }
-                else
-                {
-                    uiManager.MostrarPantallaPerdiste(); // Mostrar pantalla de perdiste si el jugador restante tiene vida pero alguien lo eliminó
-                    PauseGame(); // Pausar el juego cuando se muestra la pantalla de perdiste
-                }
+                // Si solo queda un jugador con vida mayor que cero, muestra la pantalla de "Ganaste"
+                uiManager.MostrarPantallaGanaste(jugadorRestante);
+                PauseGame(); // Pausar el juego cuando se muestra la pantalla de ganaste
             }
             else
             {
-                uiManager.MostrarPantallaPerdiste(); // Mostrar pantalla de perdiste si el jugador restante tiene vida cero
+                // Si el único jugador restante tiene vida cero, muestra la pantalla de "Perdiste"
+                uiManager.MostrarPantallaPerdiste();
                 PauseGame(); // Pausar el juego cuando se muestra la pantalla de perdiste
             }
         }
