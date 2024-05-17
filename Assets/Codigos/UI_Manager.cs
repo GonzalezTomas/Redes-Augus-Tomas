@@ -8,26 +8,40 @@ public class UI_Manager : MonoBehaviour
 {
     public TextMeshProUGUI playerCountText;
 
-    public void UpdatePlayerCount(int count)
-    {
-        playerCountText.text = "faltan mas jugadores para empezar la partida ";
-    }
-
     public GameObject pantallaPerdiste;
     public GameObject pantallaGanaste;
+    public GameManager gameManager;
 
-    public void MostrarPantallaPerdiste()
+    private void Start()
     {
-        pantallaPerdiste.SetActive(true);
+        gameManager = FindObjectOfType<GameManager>();
     }
 
-    public void MostrarPantallaGanaste()
+    public void UpdatePlayerCount(int count)
+    {
+        playerCountText.text = count < 2 ? "Faltan más jugadores para empezar la partida" : "Jugadores en la partida: " + count;
+    }
+
+    public void MostrarPantallaPerdiste(Jugador perdedor)
+    {
+        pantallaPerdiste.SetActive(true);
+        // Puedes personalizar el mensaje de perdiste aquí si es necesario
+    }
+
+    public void MostrarPantallaGanaste(Jugador ganador)
     {
         pantallaGanaste.SetActive(true);
+        // Puedes personalizar el mensaje de ganador aquí si es necesario
     }
 
     public void ReiniciarJuego()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        pantallaPerdiste.SetActive(false);
+        pantallaGanaste.SetActive(false);
+        gameManager.ReiniciarJuego();
     }
 }
+
+
+
+

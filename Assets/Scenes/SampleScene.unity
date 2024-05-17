@@ -2980,6 +2980,7 @@ MonoBehaviour:
   playerCountText: {fileID: 1537140300}
   pantallaPerdiste: {fileID: 1191383688}
   pantallaGanaste: {fileID: 276722566}
+  gameManager: {fileID: 2077625527}
 --- !u!114 &2077625527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2996,6 +2997,7 @@ MonoBehaviour:
   uiManager: {fileID: 2077625526}
   gameIsPaused: 0
   textPlayersNecesarios: {fileID: 1537140298}
+  respawn: {fileID: 2060848213}
 --- !u!4 &2077625528
 Transform:
   m_ObjectHideFlags: 0
