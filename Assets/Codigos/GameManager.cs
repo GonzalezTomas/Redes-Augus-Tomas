@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Fusion;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public List<Jugador> players = new List<Jugador>();
     public UI_Manager uiManager;
@@ -42,6 +43,35 @@ public class GameManager : MonoBehaviour
         // Actualizar el texto de los jugadores
         uiManager.UpdatePlayerCount(players.Count);
     }
+
+    
+    public void JugadorMuere(Jugador jugadorMuerto)
+    {
+        // Mostrar la pantalla de "PERDISTE" al jugador que murió
+        uiManager.MostrarPantallaPerdiste();
+
+        bool alguienGano = true; // Suponemos que alguien ganó
+
+        // Verificar si otro jugador está vivo
+        foreach (Jugador jugador in players)
+        {
+            if (jugador != jugadorMuerto)
+            {
+                alguienGano = false; // Si otro jugador está vivo, nadie ha ganado aún
+                break;
+            }
+        }
+
+        // Si nadie más está vivo, mostrar la pantalla de "GANASTE"
+        if (alguienGano)
+        {
+            uiManager.MostrarPantallaGanaste();
+        }
+    }
+
+
+
+
 
     void FindAndAddPlayers()
     {

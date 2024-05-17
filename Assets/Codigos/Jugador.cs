@@ -25,6 +25,8 @@ public class Jugador : NetworkBehaviour
     private float dashEnfriado = 3f;
     private float UltimoDash = -Mathf.Infinity;
 
+    public GameManager gameManager;
+
     [Networked, OnChangedRender(nameof(OnNetHealtChanged))]
     public float Vida { get; set; } = 100;
 
@@ -32,6 +34,19 @@ public class Jugador : NetworkBehaviour
     void OnNetHealtChanged() => Debug.Log($"Vida = {Vida}");
 
     
+
+    private void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
+
+    public void Muere()
+    {
+        gameManager.JugadorMuere(this);
+        Runner.Despawn(Object);
+    }
+
+
     public override void Spawned()
     {
         rb = GetComponent<Rigidbody>();
@@ -121,13 +136,10 @@ public class Jugador : NetworkBehaviour
         }
     }
 
-    
-    void Muere()
-    {
-        Runner.Despawn(Object);
-    }
 
     
+
+
     private bool IsGrounded()
     {
         RaycastHit hit;
