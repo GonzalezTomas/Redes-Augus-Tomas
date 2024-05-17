@@ -10,15 +10,15 @@ public class GameManager : NetworkBehaviour
     public List<Jugador> players = new List<Jugador>();
     public UI_Manager uiManager;
     public bool gameIsPaused;
-    
     public GameObject textPlayersNecesarios;
+    public Respawn respawn;
 
     private bool gameStarted = false;
 
     private void Awake()
     {
         uiManager = FindObjectOfType<UI_Manager>();
-        // Buscar automáticamente todos los objetos con la etiqueta "Player" y agregarlos a la lista de jugadores
+        respawn = FindObjectOfType<Respawn>();
         FindAndAddPlayers();
     }
 
@@ -28,7 +28,6 @@ public class GameManager : NetworkBehaviour
 
         if (!gameStarted)
         {
-            // Verificar si hay al menos dos jugadores antes de comenzar la partida
             if (players.Count < 2)
             {
                 textPlayersNecesarios.SetActive(true);
@@ -40,42 +39,16 @@ public class GameManager : NetworkBehaviour
             }
         }
 
-        // Actualizar el texto de los jugadores
+        if (gameStarted)
+        {
+            CheckPlayerStates();
+        }
+
         uiManager.UpdatePlayerCount(players.Count);
     }
 
-    
-    public void JugadorMuere(Jugador jugadorMuerto)
-    {
-        // Mostrar la pantalla de "PERDISTE" al jugador que murió
-        uiManager.MostrarPantallaPerdiste();
-
-        bool alguienGano = true; // Suponemos que alguien ganó
-
-        // Verificar si otro jugador está vivo
-        foreach (Jugador jugador in players)
-        {
-            if (jugador != jugadorMuerto)
-            {
-                alguienGano = false; // Si otro jugador está vivo, nadie ha ganado aún
-                break;
-            }
-        }
-
-        // Si nadie más está vivo, mostrar la pantalla de "GANASTE"
-        if (alguienGano)
-        {
-            uiManager.MostrarPantallaGanaste();
-        }
-    }
-
-
-
-
-
     void FindAndAddPlayers()
     {
-        // Buscar objetos con la etiqueta "Player" que no estén en la lista y agregarlos
         GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("jugador");
         foreach (GameObject playerObject in playerObjects)
         {
@@ -97,8 +70,37 @@ public class GameManager : NetworkBehaviour
     public void PauseGame()
     {
         gameIsPaused = true;
-       
         Time.timeScale = 0;
     }
+
+    void CheckPlayerStates()
+    {
+        players.RemoveAll(player => player == null);
+
+        if (gameStarted && players.Count == 1)
+        {
+            Jugador jugadorGanador = players[0];
+            Jugador jugadorPerdedor = players.Find(player => player != jugadorGanador);
+
+            // Mostrar pantalla de ganaste al jugador ganador
+            uiManager.MostrarPantallaGanaste(jugadorGanador);
+
+            // Mostrar pantalla de perdiste al jugador perdedor
+            uiManager.MostrarPantallaPerdiste(jugadorPerdedor);
+        }
+        
+    }
+
+
+    public void ReiniciarJuego()
+    {
+        players.Clear();
+        gameStarted = false;
+        FindAndAddPlayers();
+        respawn.RespawnPlayers();
+        StartGame();
+    }
 }
+
+
 

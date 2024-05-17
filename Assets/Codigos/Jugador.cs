@@ -5,15 +5,17 @@ using Fusion;
 
 public class Jugador : NetworkBehaviour
 {
-    
     public float speed;
     public float jumpForce;
     public float danio = 20f;
     public Animator anim;
     public Bala _bala;
     public Transform _apareceBala;
+    public string username;
 
-    
+    public static int nextPlayerID = 1; // Variable estática para el próximo ID de jugador
+    public int playerID; // ID único del jugador
+
     private Rigidbody rb;
     private float horizontalInput;
     private bool _disparo;
@@ -21,7 +23,7 @@ public class Jugador : NetworkBehaviour
 
     private bool dashActivado = false;
     public float duracionDash;
-    public float velocidadDash; 
+    public float velocidadDash;
     private float dashEnfriado = 3f;
     private float UltimoDash = -Mathf.Infinity;
 
@@ -30,19 +32,22 @@ public class Jugador : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnNetHealtChanged))]
     public float Vida { get; set; } = 100;
 
-    
+
     void OnNetHealtChanged() => Debug.Log($"Vida = {Vida}");
 
-    
+
 
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        playerID = nextPlayerID; // Asignar el ID único al jugador
+        nextPlayerID++; // Incrementar el contador de ID para el próximo jugador
+        anim = GetComponent < Animator >();
     }
 
     public void Muere()
     {
-        gameManager.JugadorMuere(this);
+        //gameManager.JugadorMuere(this);
         Runner.Despawn(Object);
     }
 
@@ -56,12 +61,12 @@ public class Jugador : NetworkBehaviour
         Camera.main.GetComponent<Camara>()?.Target(transform);
     }
 
-    
+
     void Update()
     {
         horizontalInput = Input.GetAxis("Horizontal");
 
-        
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (IsGrounded())
@@ -77,13 +82,13 @@ public class Jugador : NetworkBehaviour
             }
         }
 
-        
+
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             _disparo = true;
         }
 
-       
+
         if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time >= UltimoDash + dashEnfriado && !dashActivado)
         {
             StartCoroutine(Dash());
@@ -91,10 +96,12 @@ public class Jugador : NetworkBehaviour
         }
     }
 
-    
+
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
+
+        Animaciones();
 
         if (horizontalInput != 0)
         {
@@ -112,20 +119,27 @@ public class Jugador : NetworkBehaviour
         }
     }
 
-    
+    private void Animaciones()
+    {
+        bool corriendo = Mathf.Abs(horizontalInput) > 0.1f;
+        anim.SetBool("run", corriendo);
+        anim.SetBool("idle", !corriendo);
+    }
+
+
     void ApareceBala()
     {
         Runner.Spawn(_bala, _apareceBala.position, _apareceBala.rotation);
     }
 
-    
+
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_RecibirDaño(float RecibirDanio)
     {
         Local_RecibirDaño(RecibirDanio);
     }
 
-   
+
     public void Local_RecibirDaño(float RecibirDanio)
     {
         Vida -= RecibirDanio;
@@ -136,10 +150,6 @@ public class Jugador : NetworkBehaviour
         }
     }
 
-
-    
-
-
     private bool IsGrounded()
     {
         RaycastHit hit;
@@ -147,23 +157,24 @@ public class Jugador : NetworkBehaviour
         return Physics.Raycast(transform.position, Vector3.down, out hit, distance);
     }
 
-    
+
     IEnumerator Dash()
     {
         dashActivado = true;
 
-        
+
         rb.velocity = transform.forward * velocidadDash;
 
-      
+
         yield return new WaitForSeconds(duracionDash);
 
-        
+
         rb.velocity = Vector3.zero;
 
         dashActivado = false;
     }
 }
+
 
 
 
