@@ -96,19 +96,7 @@ public class GameManager : NetworkBehaviour
     }
 
 
-    Jugador GetJugadorQueElimino(Jugador jugador)
-    {
-      
-        foreach (Jugador otroJugador in players)
-        {           
-            if (otroJugador != jugador && otroJugador.Vida <= 0)
-            {
-                return otroJugador;
-            }
-        }
-      
-        return null;
-    }
+    
 
     public void JugadorMuerto(Jugador jugador)
     {

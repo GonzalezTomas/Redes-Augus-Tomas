@@ -6,14 +6,19 @@ using Fusion;
 public class Respawn : SimulationBehaviour, IPlayerJoined
 {
     [SerializeField] private GameObject _jugardorPrefab;
+    [SerializeField] private Transform[] _spawnPoints; // Los dos puntos de spawn
 
     public void PlayerJoined(PlayerRef Jugador)
     {
         if (Jugador == Runner.LocalPlayer)
         {
-            Vector3 posicion = new Vector3(-4.25f, 3.86f, 0f);
-            Runner.Spawn(_jugardorPrefab, posicion);
+            // Seleccionar aleatoriamente uno de los dos puntos de spawn
+            Transform spawnPoint = _spawnPoints[Random.Range(0, _spawnPoints.Length)];
+
+            // Spawnear el jugador en el punto seleccionado
+            Runner.Spawn(_jugardorPrefab, spawnPoint.position);
         }
     }
 }
+
 
