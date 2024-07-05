@@ -165,11 +165,3 @@ public class Jugador : NetworkBehaviour
         dashActivado = false;
     }
 }
-
-
-
-
-
-
-
-
