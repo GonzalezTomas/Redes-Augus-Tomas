@@ -34,7 +34,7 @@ public class PlayerController : NetworkBehaviour
 
         if (networkInputData.isFirePressed)
         {
-          //  _myWeaponHandler.Fire();
+           // _myWeaponHandler.Fire();
         }
     }
 

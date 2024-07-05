@@ -6,7 +6,7 @@ using Fusion;
 using Fusion.Addons.Physics;
 
 [RequireComponent(typeof(NetworkRigidbody3D))]
-public class Bala : NetworkBehaviour
+public class Bullet : NetworkBehaviour
 {
     private NetworkRigidbody3D _networkRb;
 
