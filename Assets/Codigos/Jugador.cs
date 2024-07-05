@@ -18,7 +18,7 @@ public class Jugador : NetworkBehaviour
 
     private Rigidbody rb;
     private float horizontalInput;
-    private bool _disparo;
+    public bool _disparo;
     private bool canDoubleJump = false;
 
     private bool dashActivado = false;
