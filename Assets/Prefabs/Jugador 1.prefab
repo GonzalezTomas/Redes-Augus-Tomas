@@ -185,7 +185,7 @@ Transform:
   m_GameObject: {fileID: 1165520630312626158}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0.034, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -302,10 +302,11 @@ GameObject:
   - component: {fileID: 2734898679713629128}
   - component: {fileID: 4822362257005991642}
   - component: {fileID: 7291073549532752815}
-  - component: {fileID: 6511318552452236428}
   - component: {fileID: 7359282849879585955}
   - component: {fileID: 3327462544245426806}
   - component: {fileID: 3398090750255823130}
+  - component: {fileID: 5877461353029615799}
+  - component: {fileID: 1262968589238814038}
   m_Layer: 6
   m_Name: Jugador 1
   m_TagString: jugador
@@ -322,7 +323,7 @@ Transform:
   m_GameObject: {fileID: 1704653483444477103}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.36233, z: -0.13477}
+  m_LocalPosition: {x: 0, y: 0.957, z: -0.13477}
   m_LocalScale: {x: 1.4076779, y: 1.4076779, z: 1.4076779}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -402,28 +403,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6511318552452236428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1704653483444477103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 1
-  _interpolationTarget: {fileID: 0}
-  UsePreciseRotation: 0
-  UseRenderSleepThresholds: 0
-  RenderThresholds:
-    UseEnergy: 1
-    Position: 0.01
-    Rotation: 0.01
-    Scale: 0.01
 --- !u!114 &7359282849879585955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,6 +421,8 @@ MonoBehaviour:
   anim: {fileID: 7291073549532752815}
   _bala: {fileID: 5808619706472329623, guid: 0839274b41201c446b2b92d2c796533f, type: 3}
   _apareceBala: {fileID: 7139622097324636317}
+  username: 
+  playerID: 0
   duracionDash: 0.1
   velocidadDash: 30
   gameManager: {fileID: 0}
@@ -463,9 +444,9 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 6511318552452236428}
   - {fileID: 7359282849879585955}
   - {fileID: 3398090750255823130}
+  - {fileID: 5877461353029615799}
 --- !u!114 &3398090750255823130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,6 +465,30 @@ MonoBehaviour:
   SyncSettings: 79
   StateHashes: 0000000095e5679fe8e95854eac9408c76be34fb
   TriggerHashes: 00000000
+--- !u!114 &5877461353029615799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704653483444477103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b961469ba9f3eb84ca61d70ec9eb9795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1262968589238814038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704653483444477103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2d628d3631d9ea42ad8b74981761a4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1730837991374670702
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,7 +1602,7 @@ Transform:
   m_GameObject: {fileID: 5823420755019267276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -0.084, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
