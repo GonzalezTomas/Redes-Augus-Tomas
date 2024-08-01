@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class NetworkCharacterControllerCustom : NetworkCharacterController
 {
+    public bool CanMove { get; set; } = true;
+
     public override void Move(Vector3 direction)
     {
+        if (!CanMove) return;
+
         var deltaTime = Runner.DeltaTime;
         var previousPos = transform.position;
         var moveVelocity = Velocity;
@@ -30,7 +34,8 @@ public class NetworkCharacterControllerCustom : NetworkCharacterController
         else
         {
             horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
-            transform.rotation = Quaternion.Euler(Vector3.up * (Mathf.Sign(direction.z) < 0 ? 180 : 0));
+            transform.rotation = Quaternion.Euler(Vector3.up * (Mathf.Sign(direction.x) < 0 ? 180 : 0));
+
         }
 
         moveVelocity.x = horizontalVel.z;
